@@ -1,0 +1,174 @@
+extends layout
+
+block layout-content
+  div.View.UserView
+    div.Row 
+      div.Message
+        div.Title
+          h3 TOP O' THE TIME CARD TO YA! 
+        form(name="tcform")
+          table 
+            tr 
+              td 
+                label(for='date') date: 
+                  input(type='date', name='date', value='' step=".1")
+              td  
+                label(for='timeIn') time in: 
+                  input(type='number', class='timeTop', name='timeIn', value='0' step=".1")
+              td  
+                label(for='lunchOut') lunch out: 
+                  input(type='number', class='timeTop', name='lunchOut', value='0' step=".1")
+              td  
+                label(for='lunchIn') lunch in: 
+                  input(type='number', class='timeTop', name='lunchIn', value='' step=".1")
+              td  
+                label(for='timeOut') time out: 
+                  input(type='number', class='timeTop', name='timeOut', value='' step=".1")
+              td
+                p(style="font-weight: bold; min-width: 100px;")
+                  | total: 
+                  span.totalTop 0
+                  |
+            tr 
+              td.formBottom 
+                tr 
+                  td 
+                    label(for='jobNo1') Job #:
+                      input(type='text', name='jobNo1', value='' required)
+                  td 
+                    label(for='clientCode1') Client:
+                      input(type='text', name='clientCode1', value='' required)
+                  td 
+                    label(for='activityCode1') Activity Code:
+                      input(type='text', name='activityCode1', value='' required)
+                  td 
+                    label(for='hours1') Hours:
+                      input(type='text', class='timeBottom', name='hours1', value='' required)
+                tr
+                  td 
+                    label(for='jobNo2') Job #:
+                      input(type='text', name='jobNo2', value='' required)
+                  td 
+                    label(for='clientCode2') Client:
+                      input(type='text', name='clientCode2', value='' required)
+                  td 
+                    label(for='activityCode2') Activity Code:
+                      input(type='text', name='activityCode2', value='' required)
+                  td 
+                    label(for='hours2') Hours:
+                      input(type='text', class='timeBottom', name='hours2', value='' required)
+                tr
+                  td 
+                    label(for='jobNo3') Job #:
+                      input(type='text', name='jobNo3', value='' required)
+                  td 
+                    label(for='clientCode3') Client:
+                      input(type='text', name='clientCode3', value='' required)
+                  td 
+                    label(for='activityCode3') Activity Code:
+                      input(type='text', name='activityCode3,' value='' required)
+                  td 
+                    label(for='hours3') Hours:
+                      input(type='text', class='timeBottom', name='hours3', value='' required)
+                tr
+                  td
+                    p(style="font-weight: bold; min-width: 100px;")
+                      | total: 
+                      span.totalBottom
+                      |
+            tr
+              td
+                input(type='button', id="sbmtBtn" value='Submit', onClick="console.log('SUBMITTED')", disabled="true")
+
+
+  //- script.
+  //-   const timeInInput = document.querySelector('input[name="timeIn"]')
+  //-   const timeOutInput = document.querySelector('input[name="timeOut"]')
+  //-   const lunchOutInput = document.querySelector('input[name="lunchOut"]')
+  //-   const lunchInInput = document.querySelector('input[name="lunchIn"]')
+  //-   const totalVal = document.querySelector('.total')
+
+  //-   let tiVal = timeInInput.value || 0
+  //-   let toVal = timeOutInput.value || 0
+  //-   let liVal = lunchInInput.value || 0
+  //-   let loVal = lunchOutInput.value || 0
+
+  //-   function calc() {
+  //-     tiVal = timeInInput.value || 0
+  //-     toVal = timeOutInput.value || 0
+  //-     liVal = lunchInInput.value || 0
+  //-     loVal = lunchOutInput.value || 0
+  //-     total = Math.round((toVal - (liVal - loVal) - tiVal)*10) / 10
+  //-     return total
+  //-   }
+    
+  //-   timeInInput.addEventListener('change', event => {
+  //-     totalVal.innerHTML = calc()
+  //-   })
+  //-   timeOutInput.addEventListener('change', event => {
+  //-     totalVal.innerHTML = calc()
+  //-   })
+  //-   lunchOutInput.addEventListener('change', event => {
+  //-     totalVal.innerHTML = calc()
+  //-   })
+  //-   lunchInInput.addEventListener('change', event => {
+  //-     totalVal.innerHTML = calc()
+  //-   })
+
+  script.
+    const inputsTop = document.querySelectorAll('input[class="timeTop"]')
+    const hoursBottom = document.querySelectorAll('input[class="timeBottom"]')
+    const totalValTop = document.querySelector('.totalTop')
+    const totalValBot = document.querySelector('.totalBottom')
+    const maxTop = inputsTop.length
+    const maxBottom = hoursBottom.length
+    const submitBtn = document.querySelector('#sbmtBtn')
+
+    // Event Listeners for Top of Timecard
+    for (let i=0; i < maxTop; i++) {
+      inputsTop[i].addEventListener('change', event => {
+        totalValTop.innerHTML = calcTop()
+        validateTotals()
+      })
+    }
+
+    // Event Listeners for Bottom of Timecard
+    for (let i=0; i < maxBottom; i++) {
+      hoursBottom[i].addEventListener('change', event => {
+        totalValBot.innerHTML = calcBottom()
+        validateTotals()
+      })
+    }
+
+    // Calculations for Top of Timecard
+    function calcTop() {
+      tiVal = document.querySelector('input[name="timeIn"]').value || 0
+      toVal = document.querySelector('input[name="timeOut"]').value || 0
+      liVal = document.querySelector('input[name="lunchIn"]').value || 0
+      loVal = document.querySelector('input[name="lunchOut"]').value || 0
+      total = Math.round((toVal - (liVal - loVal) - tiVal)*10) / 10
+      return total
+    };
+
+    // Calculations for Bottom of Timecard
+    function calcBottom() {
+      t = Number(0)
+      for (let i=0; i < maxBottom; i++) {
+        t = t + Number(hoursBottom[i].value)
+      }
+      return t
+    }
+
+    // Validation Function for Total Values
+    function validateTotals() {
+      if (totalValTop.innerHTML == totalValBot.innerHTML) {
+        console.log('VALUES MATCH!')
+        submitBtn.disabled = false
+        submitBtn.style.backgroundColor = "green"
+      } else {
+        console.log('VALUES DON\'T MATCH!')
+        submitBtn.disabled = true
+        submitBtn.style.backgroundColor = "red"
+
+      }
+    }

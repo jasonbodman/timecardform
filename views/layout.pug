@@ -1,0 +1,21 @@
+block variables
+doctype html
+html
+  head
+    meta(charset="utf-8")
+    link(rel="shortcut icon", href="/favicon.ico")
+    meta(name="vieMan wport", content="width=device-width, initial-scale=1, shrink-to-fit=no")
+    meta(name="theme-color", content="#000000")
+    link(rel="stylesheet" href="/style.css")
+
+    title #{title} | M&amp;M Associates, Inc.
+  body
+    div#root
+      div.Header
+        img(src='mm_logo_sml.png')
+        h1.Banner M&amp;M Associates - Employee Dashboard
+        p(style="color: #ffffff; font-weight: bold; white-space: nowrap;")
+          a(href='/') Home
+          |  | 
+          a(href='/entry') Login 
+      block layout-content
